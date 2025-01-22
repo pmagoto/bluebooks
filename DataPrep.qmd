@@ -47,8 +47,8 @@ locationsprepped <- read.csv("locationsprepped.csv") %>%
   mutate_geocode(full.address, output = "latlon", source = "google")
 enttriesprepped <- read.csv("entriesprepped.csv") %>% 
   mutate_geocode(full.address, output = "latlon", source = "google")
-write.csv(locationsprepped, file="locations.final")
-write.csv(enttriesprepped, file="entries.final")
+write.csv(locationsprepped, file="locations.final.csv")
+write.csv(enttriesprepped, file="entries.final.csv")
 ```
 
 Creating data-frames for polygons to represent Black and White Storyville:
