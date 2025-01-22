@@ -5,7 +5,7 @@ format: html
 editor: visual
 ---
 
-Opening the correct packages:
+### Opening the correct packages:
 
 ```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
@@ -21,14 +21,14 @@ library(leaflet.providers)
 library(spatstat)
 ```
 
-Registering my Google Key:
+### Registering my Google Key:
 
 ```{r}
 #register google key 
 register_google(key = Sys.getenv("GOOGLE_KEY"))
 ```
 
-inserting data sets and prepping them to be geo-coded:
+### inserting data sets and prepping them to be geo-coded:
 
 ```{r}
 locations <- read.csv("locations3.csv") %>% 
@@ -51,7 +51,7 @@ write.csv(locationsprepped, file="locations.final.csv")
 write.csv(enttriesprepped, file="entries.final")
 ```
 
-Creating data-frames for polygons to represent Black and White Storyville:
+### Creating data-frames for polygons to represent Black and White Storyville:
 
 ```{r}
 longitudeBSV <- c(-90.080601, -90.079958, -90.077019, -90.077834) #longitude for the polygon
@@ -59,7 +59,7 @@ latitudeBSV <- c(29.954152,29.955334,29.954153,29.952984) #latitude for the poly
 lonlatBSV <- as.data.frame(cbind(longitudeBSV,latitudeBSV)) #create dataframe for the polygon
 longitudeWSV <- c(-90.076034, -90.073988, -90.070663,-90.072809)
 latitudeWSV <- c(29.959378, 29.961675,29.959434,29.957063)
-lonlatWSV <- as.data.frame(cbind(longitudeWSV,latitudeWSV))
+lonlatSV <- as.data.frame(cbind(longitudeWSV,latitudeWSV))
 ```
 
 Notes:
@@ -76,14 +76,22 @@ Notes:
 
     -   center: ?
 
-1.  White Storyville Coords: using the city ordinance 4118 and the introductions to the Blue Books to create this data. 1897-1917.
+<!-- -->
 
-    -   bottom left:29.959378,-90.076034
+-   White Storyville Coords: using the city ordinance 4118 and the introductions to the Blue Books to create this data. 1897-1917.
 
-    -   top left: 29.961675,-90.073988
+    -   bottom left: 29.959378,-90.076034 (Corner of Canal St. and N. Robertson St.)
 
-    -   top right:29.959434,-90.070663
+    -   top left: 29.961675,-90.073988 (Corner of N. Robertson and St. Louis St)
 
-    -   bottom right:29.957063,-90.072809
+    -   top right:29.959434,-90.070663 (Corner of St. Louis Street and N. Basin St.)
+
+    -   bottom right:29.957063,-90.072809 (Corner of N. basin St and Canal St.)
 
     -   center of WSV: 29.958675,-90.073182
+
+### Leaflet codes to start an interactive map:
+
+```{r}
+
+```
