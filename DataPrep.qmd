@@ -1,0 +1,39 @@
+---
+title: "DataPrep"
+author: "PMagoto"
+format: html
+editor: visual
+---
+
+Opening the correct packages:
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
+library(ggplot2) 
+library(tidyverse)
+library(DigitalMethodsData)
+library(ggmap)
+library(tidygeocoder)
+library(leaflet)
+library(leaflet.extras)
+library(leaftime)
+library(leaflet.providers)
+library(spatstat)
+```
+
+Registering my Google Key:
+
+```{r}
+#register google key 
+register_google(key = Sys.getenv("GOOGLE_KEY"))
+```
+
+inserting data sets and prepping them to be geo-coded:
+
+```{r}
+locations <- read.csv("locations3.csv") %>% 
+  mutate(full.address = paste0(street.address,","," ", city, ",", " ", state))
+entries <- read.csv("entries3.csv") %>% 
+  mutate(full.address = paste0(street.address,","," ", city, ",", " ", state))
+people <- read.csv("people3.csv") #I dont think I can geocode multiple street addresses for the people table, instead I will geocode only the locations and entries table, I can track the womens movements by their people i.d
+```
