@@ -35,5 +35,12 @@ locations <- read.csv("locations3.csv") %>%
   mutate(full.address = paste0(street.address,","," ", city, ",", " ", state))
 entries <- read.csv("entries3.csv") %>% 
   mutate(full.address = paste0(street.address,","," ", city, ",", " ", state))
-people <- read.csv("people3.csv") #I dont think I can geocode multiple street addresses for the people table, instead I will geocode only the locations and entries table, I can track the womens movements by their people i.d
+people <- read.csv("people3.csv") 
+#I dont think I can geocode multiple street addresses for the people table, instead I will geocode only the locations and entries table, I can track the womens movements by their people i.d
+```
+
+geocoding data:
+
+```{r}
+
 ```
