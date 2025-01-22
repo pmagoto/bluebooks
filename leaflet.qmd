@@ -1,0 +1,29 @@
+---
+title: "Leaflet"
+author: "Paige Magoto"
+format: html
+editor: visual
+---
+
+Loading packages:
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
+library(ggplot2) 
+library(tidyverse)
+library(DigitalMethodsData)
+library(ggmap)
+library(tidygeocoder)
+library(leaflet)
+library(leaflet.extras)
+library(leaftime)
+library(leaflet.providers)
+library(spatstat)
+```
+
+Loading the correct data:
+
+```{r}
+locations <- read.csv("locations.final.csv")
+entries <- read.csv("entries.final.csv")
+```
