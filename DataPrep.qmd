@@ -19,6 +19,7 @@ library(leaflet.extras)
 library(leaftime)
 library(leaflet.providers)
 library(spatstat)
+library(sf)
 ```
 
 ### Registering my Google Key:
@@ -57,9 +58,11 @@ write.csv(enttriesprepped, file="entries.final")
 longitudeBSV <- c(-90.080601, -90.079958, -90.077019, -90.077834) #longitude for the polygon
 latitudeBSV <- c(29.954152,29.955334,29.954153,29.952984) #latitude for the polygon
 lonlatBSV <- as.data.frame(cbind(longitudeBSV,latitudeBSV)) #create dataframe for the polygon
+saveRDS(lonlatBSV, "BSVpolygon.rds")
 longitudeWSV <- c(-90.076034, -90.073988, -90.070663,-90.072809)
 latitudeWSV <- c(29.959378, 29.961675,29.959434,29.957063)
 lonlatSV <- as.data.frame(cbind(longitudeWSV,latitudeWSV))
+saveRDS(lonlatSV, "SVpolygon.rds")
 ```
 
 Notes:
