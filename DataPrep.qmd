@@ -35,11 +35,23 @@ locations <- read.csv("locations3.csv") %>%
   mutate(full.address = paste0(street.address,","," ", city, ",", " ", state))
 entries <- read.csv("entries3.csv") %>% 
   mutate(full.address = paste0(street.address,","," ", city, ",", " ", state))
-people <- read.csv("people3.csv") 
-#I dont think I can geocode multiple street addresses for the people table, instead I will geocode only the locations and entries table, I can track the womens movements by their people i.d
+people <- read.csv("people3.csv") #no fuull address is needed
+write.csv(locations, file = "locationsprepped.csv")#prep for geocode with ful address and savw locally
+write.csv(entries, file = "entriesprepped.csv") #prep for geocode with ful address and savw locally
 ```
 
-geocoding data:
+Geo-coding data:
+
+```{r}
+locationsprepped <- read.csv("locationsprepped.csv") %>% 
+  mutate_geocode(full.address, output = "latlon", source = "google")
+enttriesprepped <- read.csv("entriesprepped.csv") %>% 
+  mutate_geocode(full.address, output = "latlon", source = "google")
+write.csv(locationsprepped, file="locations.final")
+write.csv(enttriesprepped, file="entries.final")
+```
+
+Creating data-frames for polygons to represent Black and White Storyville:
 
 ```{r}
 
