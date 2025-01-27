@@ -31,7 +31,7 @@ SVpolygon <- matrix(c(-90.076779, 29.958558, -90.073984, 29.961689, -90.070555, 
 BSVpolygon <- matrix(c(-90.080601, 29.95415, -90.079958, 29.955334, -90.077019, 29.954153, -90.077834, 29.952984, -90.080601, 29.954152), ncol = 2, byrow = TRUE)
 ```
 
-Creating a base map in leaflet:
+Creating a base map in leaflet for WSV and BSV:
 
 ```{r}
 SVbase <- leaflet() %>% 

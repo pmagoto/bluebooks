@@ -128,7 +128,7 @@ whiteicon <- makeIcon(iconUrl = "icons/whiteicon.png", iconWidth = 24, iconHeigh
 buisinessnametest <- entries %>% #this is creating only names locations
   filter(!is.na(house.name) & trimws(house.name) != "") %>%
   group_by(house.name) %>% 
-  
+  summ
 ```
 
 #### Sorting by year: 
