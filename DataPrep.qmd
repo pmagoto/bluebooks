@@ -64,8 +64,8 @@ latitudeWSV <- c(29.959378, 29.961675,29.959434,29.957063)
 lonlatSV <- as.data.frame(cbind(longitudeWSV,latitudeWSV))
 saveRDS(lonlatSV, "SVpolygon.rds")
 #turns out everything above this is useless because I couldnt figure out how to save this in a conce manner so I have to load BELOW into EVERYTHING I do for leaflet unless someone can give me a better option. 
-SVpolygon <- matrix(c(-90.076779, 29.958558, -90.073984, 29.961689, -90.070555, 29.959363, -90.073466, 29.956301, -90.076779, 29.958558), ncol = 2, byrow = TRUE)
-BSVpolygon <- matrix(c(-90.080601, 29.95415, -90.079958, 29.955334, -90.077019, 29.954153, -90.077834, 29.952984, -90.080601, 29.954152), ncol = 2, byrow = TRUE)
+SVpolygon <- matrix(c(-90.076779, 29.958558, -90.073984, 29.961689, -90.070555, 29.959363, -90.073466, 29.956301, -90.076779, 29.958558), ncol = 2, byrow = TRUE) #opening AND CLOSING polygons to create full shpae, thats why ti wasnt working before
+BSVpolygon <- matrix(c(-90.080601, 29.95415, -90.079958, 29.955334, -90.077019, 29.954153, -90.077834, 29.952984, -90.080601, 29.954152), ncol = 2, byrow = TRUE) #opening AND CLOSING polygons to create full shpae, thats why ti wasnt working before
 ```
 
 Notes:
@@ -115,6 +115,21 @@ leafletBSV
 
 ### Sort though data to find specific points:
 
+#### Sorting only to named businesses: 
+
 ```{r}
-buisinessnametest <- 
+buisinessnametest <- entries %>% #this is creating only names locations
+  filter(!is.na(house.name) & trimws(house.name) != "") %>%
+  group_by(house.name) %>% 
+  
+```
+
+#### Sorting by year: 
+
+```{r}
+yeartest <- entries %>% 
+  group_by(year)
+entries.1900 <- entries %>% 
+  group_by(year) %>% 
+  filter(year == 1900)
 ```
