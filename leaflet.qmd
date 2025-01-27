@@ -27,9 +27,8 @@ Loading the correct data:
 ```{r}
 locations <- read.csv("locations.final.csv")
 entries <- read.csv("entries.final.csv")
-lonlatBSV <- readRDS("BSVpolygon.rds")
-latlonSV <- readRDS("SVpolygon.rds")
 SVpolygon <- matrix(c(-90.076779, 29.958558, -90.073984, 29.961689, -90.070555, 29.959363, -90.073466, 29.956301, -90.076779, 29.958558), ncol = 2, byrow = TRUE)
+BSVpolygon <- matrix(c(-90.080601, 29.95415, -90.079958, 29.955334, -90.077019, 29.954153, -90.077834, 29.952984, -90.080601, 29.954152), ncol = 2, byrow = TRUE)
 ```
 
 Creating a base map in leaflet:
@@ -39,4 +38,12 @@ SVbase <- leaflet() %>%
   addProviderTiles("CartoDB.Positron") %>%
   addPolygons(data = SVpolygon, color = "gray3", weight = 2, fillColor = "gray3", fillOpacity = 0.2)
 SVbase
+```
+
+```{r}
+leafletBSV <- leaflet() %>% 
+  addProviderTiles("CartoDB.Positron") %>% 
+  addPolygons(data= BSVpolygon, color = "red", weight = 2, fillColor = "red", fillOpacity = 0.2) %>% 
+  addPolygons(data = SVpolygon, color = "gray3", weight = 2, fillColor = "gray3", fillOpacity = 0.2)
+leafletBSV
 ```

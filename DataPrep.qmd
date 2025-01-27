@@ -63,6 +63,9 @@ longitudeWSV <- c(-90.076034, -90.073988, -90.070663,-90.072809)
 latitudeWSV <- c(29.959378, 29.961675,29.959434,29.957063)
 lonlatSV <- as.data.frame(cbind(longitudeWSV,latitudeWSV))
 saveRDS(lonlatSV, "SVpolygon.rds")
+#turns out everything above this is useless because I couldnt figure out how to save this in a conce manner so I have to load BELOW into EVERYTHING I do for leaflet unless someone can give me a better option. 
+SVpolygon <- matrix(c(-90.076779, 29.958558, -90.073984, 29.961689, -90.070555, 29.959363, -90.073466, 29.956301, -90.076779, 29.958558), ncol = 2, byrow = TRUE)
+BSVpolygon <- matrix(c(-90.080601, 29.95415, -90.079958, 29.955334, -90.077019, 29.954153, -90.077834, 29.952984, -90.080601, 29.954152), ncol = 2, byrow = TRUE)
 ```
 
 Notes:
