@@ -113,6 +113,13 @@ leafletBSV <- leaflet() %>%
 leafletBSV
 ```
 
+### Load some icons:
+
+```{r}
+blackicon <- makeIcon(iconUrl = "icons/blackicon.png", iconWidth = 24, iconHeight = 24)
+whiteicon <- makeIcon(iconUrl = "icons/whiteicon.png", iconWidth = 24, iconHeight = 24)
+```
+
 ### Sort though data to find specific points:
 
 #### Sorting only to named businesses: 
