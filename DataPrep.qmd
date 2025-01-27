@@ -99,5 +99,22 @@ Notes:
 ### Leaflet codes to start an interactive map:
 
 ```{r}
+SVbase <- leaflet() %>% 
+  addProviderTiles("CartoDB.Positron") %>%
+  addPolygons(data = SVpolygon, color = "gray3", weight = 2, fillColor = "gray3", fillOpacity = 0.2)
+SVbase
+```
 
+```{r}
+leafletBSV <- leaflet() %>% 
+  addProviderTiles("CartoDB.Positron") %>% 
+  addPolygons(data= BSVpolygon, color = "red", weight = 2, fillColor = "red", fillOpacity = 0.2) %>% 
+  addPolygons(data = SVpolygon, color = "gray3", weight = 2, fillColor = "gray3", fillOpacity = 0.2)
+leafletBSV
+```
+
+### Sort though data to find specific points:
+
+```{r}
+buisinessnametest <- 
 ```
