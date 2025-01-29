@@ -52,6 +52,13 @@ write.csv(locationsprepped, file="locations.final.csv")
 write.csv(enttriesprepped, file="entries.final")
 ```
 
+This is the code you will use in anything else, this data is already geo-coded so you don't accidentally over run your data.
+
+```{r}
+entries <- read.csv("entries.final.csv")
+locations <- read.csv("locations.final.csv")
+```
+
 ### Creating data-frames for polygons to represent Black and White Storyville:
 
 ```{r}
@@ -81,8 +88,6 @@ Notes:
     -   bottom right: 29.952984,-90.077834
 
     -   center: ?
-
-<!-- -->
 
 -   White Storyville Coords: using the city ordinance 4118 and the introductions to the Blue Books to create this data. 1897-1917.
 
@@ -122,7 +127,7 @@ whiteicon <- makeIcon(iconUrl = "icons/whiteicon.png", iconWidth = 24, iconHeigh
 
 ### Sort though data to find specific points:
 
-#### Sorting only to named businesses: 
+#### Sorting only to named businesses:
 
 ```{r}
 buisinessnametest <- entries %>% #this is creating only names locations
@@ -131,7 +136,7 @@ buisinessnametest <- entries %>% #this is creating only names locations
   summ
 ```
 
-#### Sorting by year: 
+#### Sorting by year:
 
 ```{r}
 yeartest <- entries %>% 

@@ -47,3 +47,7 @@ leafletBSV <- leaflet() %>%
   addPolygons(data = SVpolygon, color = "gray3", weight = 2, fillColor = "gray3", fillOpacity = 0.2)
 leafletBSV
 ```
+
+the interesting angle is northern progressiveness but keeping the southern racial issue, the particularly southern project, storyville is the evidence of the uniquely southern angle
+
+jim crow sex work
