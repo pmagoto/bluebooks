@@ -57,6 +57,7 @@ This is the code you will use in anything else, this data is already geo-coded s
 ```{r}
 entries <- read.csv("entries.final.csv")
 locations <- read.csv("locations.final.csv")
+people <- read.csv("people3.csv")
 ```
 
 ### Creating data-frames for polygons to represent Black and White Storyville:
