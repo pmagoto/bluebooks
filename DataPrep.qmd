@@ -36,7 +36,7 @@ locations <- read.csv("locations3.csv") %>%
   mutate(full.address = paste0(street.address,","," ", city, ",", " ", state))
 entries <- read.csv("entries3.csv") %>% 
   mutate(full.address = paste0(street.address,","," ", city, ",", " ", state))
-people <- read.csv("people3.csv") #no fuull address is needed
+people <- read.csv("people3.csv") #no full address is needed
 write.csv(locations, file = "locationsprepped.csv")#prep for geocode with ful address and savw locally
 write.csv(entries, file = "entriesprepped.csv") #prep for geocode with ful address and savw locally
 ```
@@ -140,8 +140,24 @@ buisinessnametest <- entries %>% #this is creating only names locations
 
 ```{r}
 yeartest <- entries %>% 
-  group_by(year)
+  group_by(year) %>% 
+  summarise()
+
 entries.1900 <- entries %>% 
   group_by(year) %>% 
   filter(year == 1900)
+
+
+##people.race <- people %>% 
+  ##group_by(race.id) %>% 
+race.entries <- entries %>% 
+  group_by(lat, lon, race.id, year) %>% 
+  summarise(race.count = n()) %>% 
+  group_by(race.id) %>% 
+  mutate(scaled_count = scale(race.count)) %>% 
+  ungroup()
+```
+
+```{r}
+
 ```
