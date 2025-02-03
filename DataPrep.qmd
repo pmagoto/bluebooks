@@ -136,7 +136,7 @@ buisinessnametest <- entries %>% #this is creating only names locations
   summ
 ```
 
-#### Sorting in some ways to try and get something to work: 
+#### Sorting in some ways to try and get something to work:
 
 ```{r}
 yeartest <- entries %>% 
@@ -206,4 +206,9 @@ SVrace.map.new <- SVbase %>%
     popup = ~paste("Race ID:", race.id, "<br>Year:", year, "<br>Count:", race.count)
   )
 SVrace.map.new
+```
+
+```{r}
+check the status
+
 ```
