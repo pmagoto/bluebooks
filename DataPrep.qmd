@@ -209,6 +209,7 @@ SVrace.map.new
 ```
 
 ```{r}
+#this is from copilot idk what to do 
 # Load necessary libraries
 library(dplyr)
 library(leaflet)
@@ -258,4 +259,37 @@ SVrace.map.new
 
 ```{r}
 SVbase
+SV
+```
+
+```{r}
+race_ids <- unique(race.entries$race.id)
+color_palette <- colorFactor(topo.colors(length(race_ids)), domain = race_ids)
+race.years <- unique(race.entries$year)
+for (year in years) {
+  year_data <- race.entries %>% filter(year == !!year)
+  for (race_id in unique(year_data$race.id)) {
+    race_data <- year_data %>% filter(race.id == !!race_id)
+    SVracebase <- SVracebase %>%
+      addCircleMarkers(
+        data = race_data,
+        ~lon, ~lat,
+        radius = ~race.count, # Use race.count for the radius
+        color = ~color_palette(race.id), # Color code by race.id
+        popup = ~paste("Race ID:", race.id, "<br>Year:", year, "<br>Count:", race.count),
+        group = paste(year, race_id, sep = "_")
+      )
+  }
+}
+
+layer_groups <- unlist(lapply(race.years, function(year) {
+  paste(year, unique(race.entries$race.id), sep = "_")
+}))
+
+SVrace.year.map.new <- SVracebase %>%
+  addLayersControl(
+    overlayGroups = layer_groups,
+    options = layersControlOptions(collapsed = FALSE)
+  )
+SVrace.year.map.new
 ```
