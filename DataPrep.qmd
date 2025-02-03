@@ -136,7 +136,7 @@ buisinessnametest <- entries %>% #this is creating only names locations
   summ
 ```
 
-#### Sorting by year:
+#### Sorting in some ways to try and get something to work: 
 
 ```{r}
 yeartest <- entries %>% 
@@ -147,19 +147,63 @@ entries.1900 <- entries %>%
   group_by(year) %>% 
   filter(year == 1900)
 
-
-##people.race <- people %>% 
-  ##group_by(race.id) %>% 
 race.entries <- entries %>% 
   group_by(lat, lon, race.id, year) %>% 
   summarise(race.count = n()) %>% 
   group_by(race.id) %>% 
   mutate(scaled_count = scale(race.count)) %>% 
-  filter(!is.na(race.id) & race.id != "") %>%
   ungroup()
+
+pal <- colorNumeric(palette = 'viridis', domain = race.entries$scaled_count)
 ```
 
 ```{r}
 
+SVrace <- SVbase %>%
+  addCircleMarkers(
+    data = race.entries,
+    ~lon, ~lat,
+    radius = ~scaled_count * 5, # Scale the radius for better visualization
+    color = ~pal(scaled_count),
+    stroke = FALSE, fillOpacity = 0.7,
+    popup = ~paste("Race ID:", race.id, "<br>Year:", year, "<br>Count:", race.count)
+  ) %>%
+  addLegend(
+    "bottomright", pal = pal, values = ~scaled_count,
+    title = "Race Density",
+    opacity = 1
+  )
+```
 
+```{r}
+race.entries <- entries %>% 
+  group_by(lat, lon, race.id, year) %>% 
+  summarise(race.count = n()) %>% 
+  group_by(race.id) %>% 
+  mutate(scaled_count = scale(as.numeric(race.count))) %>% 
+  ungroup()
+
+# Create a color palette for the density
+pal <- colorNumeric(palette = "viridis", domain = race.entries$scaled_count)
+
+
+simple.race <-leaflet(data = race.entries) %>%
+  addTiles() %>%
+  addCircleMarkers(
+    ~lon, ~lat,
+    radius = ~race.count, # Use race.count for the radius
+    popup = ~paste("Race ID:", race.id, "<br>Year:", year, "<br>Count:", race.count)
+  )
+simple.race
+```
+
+```{r}
+SVrace.map.new <- SVbase %>%
+  addCircleMarkers(
+    data = race.entries,
+    ~lon, ~lat,
+    radius = ~race.count, # Use race.count for the radius
+    popup = ~paste("Race ID:", race.id, "<br>Year:", year, "<br>Count:", race.count)
+  )
+SVrace.map.new
 ```
