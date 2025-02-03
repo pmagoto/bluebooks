@@ -155,19 +155,11 @@ race.entries <- entries %>%
   summarise(race.count = n()) %>% 
   group_by(race.id) %>% 
   mutate(scaled_count = scale(race.count)) %>% 
+  filter(!is.na(race.id) & race.id != "") %>%
   ungroup()
 ```
 
 ```{r}
-# Build Leaflet map with year-based layer toggling
-race.legend <- 
-SVraceleaflet <- SVbase %>%
-  addCircleMarkers(
-    data = race.entries,
-    ~lon, ~lat,
-    radius = 3,  # Small fixed size for simplicity
-    color = ~factor(race.id, labels = c("red", "blue", "green")),  # Simple color mapping
-    stroke = FALSE, fillOpacity = 0.7,
-    popup = ~paste("Race:", race.id, "<br>Count:", race.count)
-  )
+
+
 ```
