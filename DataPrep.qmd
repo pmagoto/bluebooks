@@ -258,11 +258,6 @@ SVrace.map.new
 ```
 
 ```{r}
-SVbase
-SV
-```
-
-```{r}
 race_ids <- unique(race.entries$race.id)
 color_palette <- colorFactor(topo.colors(length(race_ids)), domain = race_ids)
 race.years <- unique(race.entries$year)
@@ -286,10 +281,219 @@ layer_groups <- unlist(lapply(race.years, function(year) {
   paste(year, unique(race.entries$race.id), sep = "_")
 }))
 
-SVrace.year.map.new <- SVracebase %>%
+SVrace.year.map.new <- SVbasemap %>%
   addLayersControl(
     overlayGroups = layer_groups,
     options = layersControlOptions(collapsed = FALSE)
   )
 SVrace.year.map.new
+```
+
+```{r}
+#this is a test, so i have new things/variables to work with 
+# Prepare the new_race_entries data frame
+new_race_entries <- entries %>% 
+  group_by(lat, lon, race.id, year) %>% 
+  summarise(race.count = n()) %>% 
+  group_by(race.id) %>% 
+  mutate(scaled_count = scale(race.count)) %>% 
+  ungroup()
+
+# Create a color palette for new_race_ids
+new_race_ids <- unique(new_race_entries$race.id)
+new_color_palette <- colorFactor(topo.colors(length(new_race_ids)), domain = new_race_ids)
+
+# Create the base map with the polygon
+NewSVracebase <- leaflet() %>% 
+  addProviderTiles("CartoDB.Positron") %>%
+  addPolygons(data = SVpolygon, color = "gray3", weight = 2, fillColor = "gray3", fillOpacity = 0.2)
+
+# Add circle markers for each combination of new_year and new_race_id as separate layers
+new_years <- unique(new_race_entries$year)
+for (new_year in new_years) {
+  new_year_data <- new_race_entries %>% filter(year == !!new_year)
+  for (new_race_id in unique(new_year_data$race.id)) {
+    new_race_data <- new_year_data %>% filter(race.id == !!new_race_id)
+    NewSVracebase <- NewSVracebase %>%
+      addCircleMarkers(
+        data = new_race_data,
+        ~lon, ~lat,
+        radius = ~race.count, # Use race.count for the radius
+        color = ~new_color_palette(race.id), # Color code by race.id
+        popup = ~paste("Race ID:", race.id, "<br>Year:", year, "<br>Count:", race.count),
+        group = paste("Year:", new_year, "Race:", new_race_id)
+      )
+  }
+}
+
+# Add layers control to toggle between the layers for both new_race_id and new_year
+new_year_groups <- paste("Year:", new_years)
+new_race_groups <- paste("Race:", new_race_ids)
+
+NewSVrace.map.new <- NewSVracebase %>%
+  addLayersControl(
+    overlayGroups = c(new_year_groups, new_race_groups),
+    options = layersControlOptions(collapsed = FALSE)
+  )
+
+# Print the map
+NewSVrace.map.new
+```
+
+```{r}
+# Prepare the new_race_entries data frame
+new_race_entries <- entries %>% 
+  group_by(lat, lon, race.id, year) %>% 
+  summarise(race.count = n()) %>% 
+  group_by(race.id) %>% 
+  mutate(scaled_count = scale(race.count)) %>% 
+  ungroup() %>% 
+  drop_na()
+
+# Create a color palette for new_race_ids
+new_race_ids <- unique(new_race_entries$race.id)
+new_color_palette <- colorFactor(topo.colors(length(new_race_ids)), domain = new_race_ids)
+
+# Create the base map without any markers
+NewSVracebase <- leaflet() %>% 
+  addProviderTiles("CartoDB.Positron") %>%
+  addPolygons(data = SVpolygon, color = "gray3", weight = 2, fillColor = "gray3", fillOpacity = 0.2)
+
+# Add circle markers for each combination of new_year and new_race_id as separate layers
+new_years <- unique(new_race_entries$year)
+for (new_year in new_years) {
+  new_year_data <- new_race_entries %>% filter(year == !!new_year)
+  for (new_race_id in unique(new_year_data$race.id)) {
+    new_race_data <- new_year_data %>% filter(race.id == !!new_race_id)
+    NewSVracebase <- NewSVracebase %>%
+      addCircleMarkers(
+        data = new_race_data,
+        ~lon, ~lat,
+        radius = ~race.count, # Use race.count for the radius
+        color = ~new_color_palette(race.id), # Color code by race.id
+        popup = ~paste("Race ID:", race.id, "<br>Year:", year, "<br>Count:", race.count),
+        group = paste("Year:", new_year, "Race:", new_race_id)
+      )
+  }
+}
+
+# Add layers control to toggle between the layers for both new_race_id and new_year
+new_year_groups <- paste("Year:", new_years)
+new_race_groups <- paste("Race:", new_race_ids)
+
+NewSVrace.map.new <- NewSVracebase %>%
+  addLayersControl(
+    overlayGroups = c(new_year_groups, new_race_groups),
+    options = layersControlOptions(collapsed = FALSE)
+  )
+
+# Print the map
+NewSVrace.map.new
+```
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+library(leaflet)
+library(tidyr)
+
+# Prepare the race.entries data frame
+race.entries <- entries %>% 
+  group_by(lat, lon, race.id, year) %>% 
+  summarise(race.count = n()) %>% 
+  group_by(race.id) %>% 
+  mutate(scaled_count = scale(race.count)) %>% 
+  ungroup() %>% 
+  drop_na() # Remove any rows with NA values
+
+# Create a color palette for race.ids
+race_ids <- unique(race.entries$race.id)
+color_palette <- colorFactor(topo.colors(length(race_ids)), domain = race_ids)
+
+# Create the base map without any markers
+SVracebase <- leaflet() %>% 
+  addProviderTiles("CartoDB.Positron") %>%
+  addPolygons(data = SVpolygon, color = "gray3", weight = 2, fillColor = "gray3", fillOpacity = 0.2)
+
+# Add circle markers for each combination of year and race.id as separate layers
+years <- unique(race.entries$year)
+for (year in years) {
+  year_data <- race.entries %>% filter(year == !!year)
+  for (race_id in unique(year_data$race.id)) {
+    race_data <- year_data %>% filter(race.id == !!race_id)
+    SVracebase <- SVracebase %>%
+      addCircleMarkers(
+        data = race_data,
+        ~lon, ~lat,
+        radius = ~race.count, # Use race.count for the radius
+        color = ~color_palette(race.id), # Color code by race.id
+        popup = ~paste("Race ID:", race.id, "<br>Year:", year, "<br>Count:", race.count),
+        group = paste("Year:", year, "Race:", race_id)
+      )
+  }
+}
+
+# Add layers control to toggle between the layers for both race.id and year
+year_groups <- paste("Year:", years)
+race_groups <- paste("Race:", race_ids)
+
+SVrace.map.new <- SVracebase %>%
+  addLayersControl(
+    overlayGroups = unique(c(year_groups, race_groups)),
+    options = layersControlOptions(collapsed = FALSE)
+  )
+
+# Print the map
+SVrace.map.new
+```
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+library(leaflet)
+library(tidyr)
+
+# Prepare the simplified_race_entries data frame
+simplified_race_entries <- entries %>% 
+  group_by(lat, lon, race.id) %>% 
+  summarise(race.count = n()) %>% 
+  group_by(race.id) %>% 
+  mutate(scaled_count = scale(race.count)) %>% 
+  ungroup() %>% 
+  drop_na() # Remove any rows with NA values
+
+# Create a color palette for simplified_race_ids
+simplified_race_ids <- unique(simplified_race_entries$race.id)
+simplified_color_palette <- colorFactor(topo.colors(length(simplified_race_ids)), domain = simplified_race_ids)
+
+# Create the base map without any markers
+SimplifiedSVracebase <- leaflet() %>% 
+  addProviderTiles("CartoDB.Positron") %>%
+  addPolygons(data = SVpolygon, color = "gray3", weight = 2, fillColor = "gray3", fillOpacity = 0.2)
+
+# Add circle markers for each simplified_race_id as separate layers
+for (simplified_race_id in simplified_race_ids) {
+  simplified_race_data <- simplified_race_entries %>% filter(race.id == !!simplified_race_id)
+  SimplifiedSVracebase <- SimplifiedSVracebase %>%
+    addCircleMarkers(
+      data = simplified_race_data,
+      ~lon, ~lat,
+      radius = ~race.count, # Use race.count for the radius
+      color = ~simplified_color_palette(race.id), # Color code by race.id
+      popup = ~paste("Race ID:", race.id, "<br>Count:", race.count),
+      group = paste("Race:", simplified_race_id)
+    )
+}
+
+# Add layers control to toggle between the layers for simplified_race_id
+simplified_race_groups <- paste("Race:", simplified_race_ids)
+
+SimplifiedSVrace.map.new <- SimplifiedSVracebase %>%
+  addLayersControl(
+    overlayGroups = simplified_race_groups,
+    options = layersControlOptions(collapsed = FALSE)
+  )
+
+# Print the map
+SimplifiedSVrace.map.new
 ```
