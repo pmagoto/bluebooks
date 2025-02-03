@@ -88,11 +88,11 @@ race.palette <- c(
 
 SVracemap <- SVbasemap %>% 
   addCircleMarkers(
-    data = race.entries,
+    data = race.entries.year,
     lng = ~lon, lat = ~lat,
     weight = 1, radius = ~sqrt(race.count) * 3,
     popup = ~paste("Race ID:", race.id, "<br>Count:", race.count, "<br>Year:", year),
-    color = ~race.palette[race.id], fillOpacity = 0.5,
+    color = ~race.palette[as.character(race.id)], fillOpacity = 0.5,
     group = ~as.character(year)
   ) %>% 
   addLayersControl(
