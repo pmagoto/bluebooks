@@ -104,10 +104,10 @@ Notes:
 ### Leaflet codes to start an interactive map:
 
 ```{r}
-SVbase <- leaflet() %>% 
+SVbasemap <- leaflet() %>% 
   addProviderTiles("CartoDB.Positron") %>%
   addPolygons(data = SVpolygon, color = "gray3", weight = 2, fillColor = "gray3", fillOpacity = 0.2)
-SVbase
+SVbasemap
 ```
 
 ```{r}
@@ -159,7 +159,7 @@ pal <- colorNumeric(palette = 'viridis', domain = race.entries$scaled_count)
 
 ```{r}
 
-SVrace <- SVbase %>%
+SVrace <- SVbasemap %>%
   addCircleMarkers(
     data = race.entries,
     ~lon, ~lat,
@@ -198,7 +198,7 @@ simple.race
 ```
 
 ```{r}
-SVrace.map.new <- SVbase %>%
+SVrace.map.new <- SVbasemap %>%
   addCircleMarkers(
     data = race.entries,
     ~lon, ~lat,
@@ -209,6 +209,53 @@ SVrace.map.new
 ```
 
 ```{r}
-check the status
+# Load necessary libraries
+library(dplyr)
+library(leaflet)
+library(sf)
 
+# Convert SVpolygon matrix to a spatial object
+SVpolygon <- matrix(c(-90.076779, 29.958558, -90.073984, 29.961689, -90.070555, 29.959363, -90.073466, 29.956301, -90.076779, 29.958558), ncol = 2, byrow = TRUE)
+SVpolygon <- st_polygon(list(SVpolygon)) %>% st_sfc() %>% st_sf()
+
+# Prepare the race.entries data frame
+race.entries <- entries %>% 
+  group_by(lat, lon, race.id, year) %>% 
+  summarise(race.count = n()) %>% 
+  group_by(race.id) %>% 
+  mutate(scaled_count = scale(race.count)) %>% 
+  ungroup()
+
+# Create the base map with the polygon
+SVracebase <- leaflet() %>% 
+  addProviderTiles("CartoDB.Positron") %>%
+  addPolygons(data = SVpolygon, color = "gray3", weight = 2, fillColor = "gray3", fillOpacity = 0.2)
+
+# Add circle markers for each year as separate layers
+years <- unique(race.entries$year)
+for (year in years) {
+  year_data <- race.entries %>% filter(year == !!year)
+  SVracebase <- SVracebase %>%
+    addCircleMarkers(
+      data = year_data,
+      ~lon, ~lat,
+      radius = ~race.count, # Use race.count for the radius
+      popup = ~paste("Race ID:", race.id, "<br>Year:", year, "<br>Count:", race.count),
+      group = as.character(year)
+    )
+}
+
+# Add layers control to toggle between years
+SVrace.map.new <- SVracebase %>%
+  addLayersControl(
+    overlayGroups = as.character(years),
+    options = layersControlOptions(collapsed = FALSE)
+  )
+
+# Print the map
+SVrace.map.new
+```
+
+```{r}
+SVbase
 ```
