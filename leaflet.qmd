@@ -76,15 +76,10 @@ leaflet(race.entries.year) %>%
 library(dplyr)
 library(leaflet)
 library(leaflet.extras)
-race.palette <- c(
-  "white" = "white",
-  "octoroon" = "pink",
-  "colored" = "purple",
-  "french" = "red",
-  "jewish" = "blue"
-)
 
-
+pal <- colorFactor(
+  palette = c('red', 'blue', 'green', 'purple', 'orange'),
+  domain = race.entries.year$race.id)
 
 SVracemap <- SVbasemap %>% 
   addCircleMarkers(
@@ -92,11 +87,11 @@ SVracemap <- SVbasemap %>%
     lng = ~lon, lat = ~lat,
     weight = 1, radius = ~sqrt(race.count) * 3,
     popup = ~paste("Race ID:", race.id, "<br>Count:", race.count, "<br>Year:", year),
-    color = ~race.palette[as.character(race.id)], fillOpacity = 0.5,
+     fillColor = ~pal(race.id), 
     group = ~as.character(year)
   ) %>% 
   addLayersControl(
-    overlayGroups = unique(as.character(race.entries$year)),
+    overlayGroups = unique(as.character(race.entries.year$year)),
     options = layersControlOptions(collapsed = FALSE)
   )  %>%
   addLegend(
