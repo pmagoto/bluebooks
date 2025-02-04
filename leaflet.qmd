@@ -93,13 +93,13 @@ SVracemap <- SVbasemap %>%
   addLayersControl(
     overlayGroups = unique(as.character(race.entries.year$year)),
     options = layersControlOptions(collapsed = FALSE)
-  )  %>%
-  addLegend(
-    position = "bottomright",
-    title = "Race ID",
-    colors = race.palette,
-    labels = names(race.palette),
-    opacity = 1
-  )
+  ) ## %>%
+ # addLegend(
+  #  position = "bottomright",
+  #  title = "Race ID",
+   # colors = race.palette,
+   # labels = names(race.palette),
+   # opacity = 1
+  #)
 SVracemap
 ```
