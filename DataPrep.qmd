@@ -246,3 +246,16 @@ SVrace.map.new <- SVracebase %>%
 # Print the map
 SVrace.map.new
 ```
+
+Load icons for Leaflet
+
+```{r}
+icon.black <- makeIcon(iconUrl = "icons/blackicon.png", iconWidth = 24, iconHeight = 24)
+icon.darkblue <- makeIcon(iconUrl = "icons/darkblue.png", iconWidth = 24, iconHeight = 24)
+icon.darkgreen <- makeIcon(iconUrl = "icons/darkgreenicon.png", iconWidth = 24, iconHeight = 24)
+icon.darkpurple <- makeIcon(iconUrl = "icons/darkpurpleicon.png", iconWidth = 24, iconHeight = 24)
+icon.lightblue <- makeIcon(iconUrl = "icons/lightblueicon.png", iconWidth = 24, iconHeight = 24)
+icon.pink <- makeIcon(iconUrl = "icons/pinkicon.png", iconWidth = 24, iconHeight = 24)
+icon.purple <- makeIcon(iconUrl = "icons/purple.png", iconWidth = 24, iconHeight = 24)
+icon.white <- makeIcon(iconUrl = "icons/whiteicon.png", iconWidth = 24, iconHeight = 24)gt
+```

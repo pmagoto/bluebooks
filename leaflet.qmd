@@ -121,3 +121,43 @@ BSVracemap <- leafletBSV %>%
   )
 BSVracemap
 ```
+
+Instead, I need to make a workable leaflet, use different makers for each race.id, and make them toggle-able. Just like the years are toggle-able.
+
+```{r}
+
+#create a way to shift through data by year
+
+```
+
+```{r}
+#named locations only
+named.locations <- locations %>% 
+  filter(!is.na(race.id) & race.id != "")
+```
+
+filer and change all entries to separate data sets
+
+```{r}
+e.1900 <- entries %>% 
+  filter(year == 1900)
+e.1901 <- entries %>% 
+  filter(year == 1901)
+e.1903 <- entries %>% 
+  filter(year == 1903)
+e.1905 <- entries %>% 
+  filter(year == 1905)
+e.1906 <- entries %>% 
+  filter(year == 1906)
+e.1907 <- entries %>% 
+  filter(year == 1907)
+e.1908 <- entries %>% 
+  filter(year == 1908)
+e.1912 <- entries %>% 
+  filter(year == 1912)
+e.1915 <- entries %>% 
+  filter(year == 1915)
+```
+
+```{r}
+```
