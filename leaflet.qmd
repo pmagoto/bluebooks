@@ -104,3 +104,20 @@ SVracemap <- SVbasemap %>%
   #opacity = 1)
 SVracemap
 ```
+
+```{r}
+BSVracemap <- leafletBSV %>% 
+  addCircleMarkers(
+    data = race.entries.year,
+    lng = ~lon, lat = ~lat,
+    weight = 1, radius = ~sqrt(race.count) * 3,
+    popup = ~paste("Race ID:", race.id, "<br>Count:", race.count, "<br>Year:", year),
+     fillColor = ~pal(race.id), 
+    group = ~as.character(year)
+  ) %>% 
+  addLayersControl(
+    overlayGroups = unique(as.character(race.entries.year$year)),
+    options = layersControlOptions(collapsed = FALSE)
+  )
+BSVracemap
+```
