@@ -62,13 +62,14 @@ race.entries.year <- entries %>%
 Density map:
 
 ```{r}
+#this is all the same i do nto rememebr why i made this 
 leaflet(race.entries.year) %>%
   addTiles() %>%
   addCircles(
     lng = ~lon, lat = ~lat,
-    weight = 1, radius = ~sqrt(race.count) * 100,
+    weight = 1, radius = ~sqrt(race.count) * 10,
     popup = ~paste("Race ID:", race.id, "<br>Count:", race.count),
-    color = "blue", fillOpacity = 0.5
+    color = "gray", fillOpacity = 0.5
   ) 
 ```
 
@@ -78,7 +79,7 @@ library(leaflet)
 library(leaflet.extras)
 
 pal <- colorFactor(
-  palette = c('red', 'blue', 'green', 'purple', 'orange'),
+  palette = c('white', 'grey2', 'purple', 'pink', 'black'),
   domain = race.entries.year$race.id)
 
 SVracemap <- SVbasemap %>% 
@@ -93,13 +94,13 @@ SVracemap <- SVbasemap %>%
   addLayersControl(
     overlayGroups = unique(as.character(race.entries.year$year)),
     options = layersControlOptions(collapsed = FALSE)
-  ) ## %>%
- # addLegend(
-  #  position = "bottomright",
-  #  title = "Race ID",
-   # colors = race.palette,
-   # labels = names(race.palette),
-   # opacity = 1
-  #)
+  )
+#%>%
+#  addLegend(
+#  position = "bottomright",
+ # title = "Race ID",
+  #colors = pal,
+  #labels = names(pal),
+  #opacity = 1)
 SVracemap
 ```
