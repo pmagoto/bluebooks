@@ -1,0 +1,34 @@
+---
+title: "ggplot"
+format: html
+editor: visual
+---
+
+## ggplot code from last semester:
+
+```{r}
+geo.race.1900 <- people.1900 %>% #filter in the people.1900 csv file
+  group_by(lat,lon,race.id) %>% #group by latitude and longitude to find density of race at each location
+    summarise(count.1900 = n()) #count to find find density at a location, by race
+geo.race.1915 <- people.1915 %>% #filter in the people.1915 file
+  group_by(lat,lon,race.id) %>% #group by latitude and longitude to find density of race at each location
+    summarise(count.1915 =n()) #count to find density at a location, by race
+geo.race <- full_join(geo.race.1900, geo.race.1915) #join both together to plot together
+geo.race.long <- pivot_longer(geo.race, cols = starts_with("count"), names_to = "year", values_to = "count") %>% #ensure that the data is readable for a feceted plot
+  arrange(desc(count)) #ensure that the data points with less density appear on top of data points with higher density to read the plot clearly
+density.map <- ggmap(staticSV) + geom_polygon(data = lonlatSV, aes(x=longitudeSV, y=latitudeSV),alpha = 0.3, color = "red", fill = "red") + 
+  geom_point(data = geo.race.long, mapping = aes(x=lon, y=lat, size=count, color=race.id)) +
+  scale_color_manual(values = c("white" = "white","colored"="gray27","octoroon"="gold","NA"= "transparent", "jewish" = "darkslateblue")) + 
+  facet_wrap("year") +
+  labs(x = "Longitude", y = "Latitude", title = "The Density of Races in the Blue Books, by location, in 1900 and in 1915")
+density.map
+#^THIS NEEDS TO BE REWORKED USING THE CORRECT INFOR FROM THE NEW DATASET 
+
+```
+
+```{r}
+ggplot.race <- entries %>% 
+  group_by(lat, lon, race.id) %>% 
+  filter(!is.na(race.id) & race.id != "") %>% 
+  summarise(count = n())
+```
