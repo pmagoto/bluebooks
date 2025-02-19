@@ -139,6 +139,7 @@ named.locations <- locations %>%
 filer and change all entries to separate data sets
 
 ```{r}
+#why did i do this?
 e.1900 <- entries %>% 
   filter(year == 1900)
 e.1901 <- entries %>% 
@@ -160,4 +161,13 @@ e.1915 <- entries %>%
 ```
 
 ```{r}
+#i need to assign a color or a year to each icon, I'm not entirely sure how im going to do this
+icon.black <- makeIcon(iconUrl = "icons/blackicon.png", iconWidth = 24, iconHeight = 24)
+icon.darkblue <- makeIcon(iconUrl = "icons/darkblue.png", iconWidth = 24, iconHeight = 24)
+icon.darkgreen <- makeIcon(iconUrl = "icons/darkgreenicon.png", iconWidth = 24, iconHeight = 24)
+icon.darkpurple <- makeIcon(iconUrl = "icons/darkpurpleicon.png", iconWidth = 24, iconHeight = 24)
+icon.lightblue <- makeIcon(iconUrl = "icons/lightblueicon.png", iconWidth = 24, iconHeight = 24)
+icon.pink <- makeIcon(iconUrl = "icons/pinkicon.png", iconWidth = 24, iconHeight = 24)
+icon.purple <- makeIcon(iconUrl = "icons/purple.png", iconWidth = 24, iconHeight = 24)
+icon.white <- makeIcon(iconUrl = "icons/whiteicon.png", iconWidth = 24, iconHeight = 24)
 ```

@@ -28,7 +28,8 @@ density.map
 
 ```{r}
 ggplot.race <- entries %>% 
-  group_by(lat, lon, race.id) %>% 
+  group_by(lat, lon, race.id,year) %>% 
   filter(!is.na(race.id) & race.id != "") %>% 
   summarise(count = n())
+
 ```
