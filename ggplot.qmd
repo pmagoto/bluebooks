@@ -7,6 +7,8 @@ editor: visual
 ## ggplot code from last semester:
 
 ```{r}
+#| eval: false
+#| include: false
 geo.race.1900 <- people.1900 %>% #filter in the people.1900 csv file
   group_by(lat,lon,race.id) %>% #group by latitude and longitude to find density of race at each location
     summarise(count.1900 = n()) #count to find find density at a location, by race
@@ -21,7 +23,7 @@ density.map <- ggmap(staticSV) + geom_polygon(data = lonlatSV, aes(x=longitudeSV
   scale_color_manual(values = c("white" = "white","colored"="gray27","octoroon"="gold","NA"= "transparent", "jewish" = "darkslateblue")) + 
   facet_wrap("year") +
   labs(x = "Longitude", y = "Latitude", title = "The Density of Races in the Blue Books, by location, in 1900 and in 1915")
-density.map
+#density.map
 #^THIS NEEDS TO BE REWORKED USING THE CORRECT INFOR FROM THE NEW DATASET 
 
 ```
@@ -31,5 +33,28 @@ ggplot.race <- entries %>%
   group_by(lat, lon, race.id,year) %>% 
   filter(!is.na(race.id) & race.id != "") %>% 
   summarise(count = n())
+```
 
+```{r}
+
+centerofSV <- c(lon = -90.073891, lat = 29.95905) #creating the static map
+staticSV <- get_map(location = centerofSV, zoom = 17, maptype = "satellite", color = "bw")
+SVpolygon <- matrix(c(-90.076779, 29.958558, -90.073984, 29.961689, -90.070555, 29.959363, -90.073466, 29.956301, -90.076779, 29.958558), ncol = 2, byrow = TRUE)
+density.map <- ggmap(staticSV) +
+#+ geom_polygon(data = SVpolygon, aes(x=longitudeSV, y=latitudeSV),alpha = 0.3, color = "red", fill = "red") 
+geom_point(data = ggplot.race, mapping = aes(x=lon, y=lat, size=count, color=race.id)) +
+  scale_color_manual(values = c("white" = "white","colored"="gray27","octoroon"="gold","NA"= "transparent", "jewish" = "darkslateblue")) + 
+  facet_wrap("year") +
+  labs(x = "Longitude", y = "Latitude", title = "The Density of Races in the Blue Books, by location, in 1900 and in 1915")
+density.map
+```
+
+```{r}
+if (is.null(staticSV)) {
+  stop("Failed to fetch the map. Check your internet connection or the parameters for get_map.")
+}
+if (!exists("SVpolygon") || !all(c("longitudeSV", "latitudeSV") %in% colnames(SVpolygon))) {
+  stop("SVpolygon data frame is missing or does not have the required columns.")
+}
++ geom_polygon(data = SVpolygon, aes(x=longitudeSV, y=latitudeSV),alpha = 0.3, color = "red", fill = "red") 
 ```
