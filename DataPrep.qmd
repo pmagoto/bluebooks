@@ -257,5 +257,5 @@ icon.darkpurple <- makeIcon(iconUrl = "icons/darkpurpleicon.png", iconWidth = 24
 icon.lightblue <- makeIcon(iconUrl = "icons/lightblueicon.png", iconWidth = 24, iconHeight = 24)
 icon.pink <- makeIcon(iconUrl = "icons/pinkicon.png", iconWidth = 24, iconHeight = 24)
 icon.purple <- makeIcon(iconUrl = "icons/purple.png", iconWidth = 24, iconHeight = 24)
-icon.white <- makeIcon(iconUrl = "icons/whiteicon.png", iconWidth = 24, iconHeight = 24)gt
+icon.white <- makeIcon(iconUrl = "icons/whiteicon.png", iconWidth = 24, iconHeight = 24)
 ```

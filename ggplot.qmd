@@ -33,6 +33,8 @@ ggplot.race <- entries %>%
   group_by(lat, lon, race.id,year) %>% 
   filter(!is.na(race.id) & race.id != "") %>% 
   summarise(count = n())
+#fucntion to do each year
+
 ```
 
 ```{r}
@@ -56,5 +58,9 @@ if (is.null(staticSV)) {
 if (!exists("SVpolygon") || !all(c("longitudeSV", "latitudeSV") %in% colnames(SVpolygon))) {
   stop("SVpolygon data frame is missing or does not have the required columns.")
 }
-+ geom_polygon(data = SVpolygon, aes(x=longitudeSV, y=latitudeSV),alpha = 0.3, color = "red", fill = "red") 
+ # Check if ggplot.race data frame exists and has the required columns
+if (!exists("ggplot.race") || !all(c("lon", "lat", "count", "race.id", "year") %in% colnames(ggplot.race))) {
+  stop("ggplot.race data frame is missing or does not have the required columns.")
+}
+
 ```
