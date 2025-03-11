@@ -26,13 +26,16 @@ density.map <- ggmap(staticSV) + geom_polygon(data = lonlatSV, aes(x=longitudeSV
 #density.map
 #^THIS NEEDS TO BE REWORKED USING THE CORRECT INFOR FROM THE NEW DATASET 
 
+
+
 ```
 
 ```{r}
 ggplot.race <- entries %>% 
   group_by(lat, lon, race.id,year) %>% 
   filter(!is.na(race.id) & race.id != "") %>% 
-  summarise(count = n())
+  summarise(count = n()) %>% 
+   arrange(desc(count))
 #fucntion to do each year
 
 ```
@@ -47,8 +50,78 @@ density.map <- ggmap(staticSV) +
 geom_point(data = ggplot.race, mapping = aes(x=lon, y=lat, size=count, color=race.id)) +
   scale_color_manual(values = c("white" = "white","colored"="gray27","octoroon"="gold","NA"= "transparent", "jewish" = "darkslateblue")) + 
   facet_wrap("year") +
-  labs(x = "Longitude", y = "Latitude", title = "The Density of Races in the Blue Books, by location, in 1900 and in 1915")
+  labs(x = "Longitude", y = "Latitude", title = "The Density of Races in the Blue Books, by location")
 density.map
+```
+
+```{r}
+e.1900.density <- entries %>% 
+  filter(year == 1900) %>% 
+  group_by(lat, lon, race.id,year) %>% 
+  filter(!is.na(race.id) & race.id != "") %>% 
+  summarise(count = n()) %>% 
+   arrange(desc(count))
+e.1901.density <- entries %>% 
+  filter(year == 1901) %>% 
+  group_by(lat, lon, race.id,year) %>% 
+  filter(!is.na(race.id) & race.id != "") %>% 
+  summarise(count = n()) %>% 
+  arrange(desc(count))
+e.1903.density <- entries %>% 
+  filter(year == 1903) %>% 
+  group_by(lat, lon, race.id,year) %>% 
+  filter(!is.na(race.id) & race.id != "") %>% 
+  summarise(count = n()) %>% 
+  arrange(desc(count))
+e.1905.density <- entries %>% 
+  filter(year == 1905) %>% 
+  group_by(lat, lon, race.id,year) %>% 
+  filter(!is.na(race.id) & race.id != "") %>% 
+  summarise(count = n()) %>% 
+  arrange(desc(count))
+e.1906.density <- entries %>% 
+  filter(year == 1906) %>% 
+  group_by(lat, lon, race.id,year) %>% 
+  filter(!is.na(race.id) & race.id != "") %>% 
+  summarise(count = n()) %>% 
+   arrange(desc(count))
+e.1907.density <- entries %>% 
+  filter(year == 1907) %>% 
+  group_by(lat, lon, race.id,year) %>% 
+  filter(!is.na(race.id) & race.id != "") %>% 
+  summarise(count = n()) %>% 
+   arrange(desc(count))
+e.1908.density <- entries %>% 
+  filter(year == 1908) %>% 
+  group_by(lat, lon, race.id,year) %>% 
+  filter(!is.na(race.id) & race.id != "") %>% 
+  summarise(count = n()) %>% 
+   arrange(desc(count))
+e.1912.density <- entries %>% 
+  filter(year == 1912) %>% 
+  group_by(lat, lon, race.id,year) %>% 
+  filter(!is.na(race.id) & race.id != "") %>% 
+  summarise(count = n()) %>% 
+   arrange(desc(count))
+e.1915.density <- entries %>% 
+  filter(year == 1915) %>% 
+  group_by(lat, lon, race.id,year) %>% 
+  filter(!is.na(race.id) & race.id != "") %>% 
+  summarise(count = n()) %>% 
+   arrange(desc(count))
+```
+
+```{r}
+
+```
+
+```{#1900}
+density.map <- ggmap(staticSV) +
+#+ geom_polygon(data = SVpolygon, aes(x=longitudeSV, y=latitudeSV),alpha = 0.3, color = "red", fill = "red") 
+geom_point(data = ggplot.race, mapping = aes(x=lon, y=lat, size=count, color=race.id)) +
+  scale_color_manual(values = c("white" = "white","colored"="gray27","octoroon"="gold","NA"= "transparent", "jewish" = "darkslateblue")) + 
+  facet_wrap("year") +
+  labs(x = "Longitude", y = "Latitude", title = "The Density of Races in the Blue Books, by location")
 ```
 
 ```{r}

@@ -39,6 +39,7 @@ entries <- read.csv("entries3.csv") %>%
 people <- read.csv("people3.csv") #no full address is needed
 write.csv(locations, file = "locationsprepped.csv")#prep for geocode with ful address and savw locally
 write.csv(entries, file = "entriesprepped.csv") #prep for geocode with ful address and savw locally
+
 ```
 
 Geo-coding data:
@@ -131,10 +132,10 @@ whiteicon <- makeIcon(iconUrl = "icons/whiteicon.png", iconWidth = 24, iconHeigh
 #### Sorting only to named businesses:
 
 ```{r}
-buisinessnametest <- entries %>% #this is creating only names locations
-  filter(!is.na(house.name) & trimws(house.name) != "") %>%
-  group_by(house.name) %>% 
-  summ
+#buisinessnametest <- entries %>% #this is creating only names locations
+  #filter(!is.na(house.name) & trimws(house.name) != "") %>%
+  #group_by(house.name) %>% 
+ # summ
 ```
 
 #### Sorting in some ways to try and get something to work:
@@ -155,7 +156,7 @@ race.entries <- entries %>%
   mutate(scaled_count = scale(race.count)) %>% 
   ungroup()
 
-pal <- colorNumeric(palette = 'viridis', domain = race.entries$scaled_count)
+pal <- colorNumeric(palette = 'viridis', domain = race.entries$scaled_count) 
 ```
 
 ```{r}
