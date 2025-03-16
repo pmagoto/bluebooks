@@ -260,3 +260,10 @@ icon.pink <- makeIcon(iconUrl = "icons/pinkicon.png", iconWidth = 24, iconHeight
 icon.purple <- makeIcon(iconUrl = "icons/purple.png", iconWidth = 24, iconHeight = 24)
 icon.white <- makeIcon(iconUrl = "icons/whiteicon.png", iconWidth = 24, iconHeight = 24)
 ```
+
+```{r}
+race.by.year <- entries %>% 
+  group_by(year, race.id) %>%
+  summarise(count= n()) %>% 
+  filter (!is.na(count))
+```

@@ -41,7 +41,7 @@ ggplot.race <- entries %>%
 ```
 
 ```{r}
-
+#thihs is useless, needs ot each be a separate map. 
 centerofSV <- c(lon = -90.073891, lat = 29.95905) #creating the static map
 staticSV <- get_map(location = centerofSV, zoom = 17, maptype = "satellite", color = "bw")
 SVpolygon <- matrix(c(-90.076779, 29.958558, -90.073984, 29.961689, -90.070555, 29.959363, -90.073466, 29.956301, -90.076779, 29.958558), ncol = 2, byrow = TRUE)
@@ -112,16 +112,21 @@ e.1915.density <- entries %>%
 ```
 
 ```{r}
-
+density.map.1900 <- ggmap(staticSV) +
+geom_polygon(data = lonlatSV, aes(x=longitudeWSV, y=latitudeWSV),alpha = 0.3, color = "red", fill = "red") +
+geom_point(data = e.1900.density, mapping = aes(x=lon, y=lat, size=count, color=race.id)) +
+  scale_color_manual(values = c("white" = "white","colored"="gray27","octoroon"="gold","NA"= "transparent", "jewish" = "darkslateblue")) + 
+  labs(x = "Longitude", y = "Latitude", title = "The Density of Races in the Blue Books, by location in 1900")
+density.map.1900
 ```
 
-```{#1900}
-density.map <- ggmap(staticSV) +
-#+ geom_polygon(data = SVpolygon, aes(x=longitudeSV, y=latitudeSV),alpha = 0.3, color = "red", fill = "red") 
-geom_point(data = ggplot.race, mapping = aes(x=lon, y=lat, size=count, color=race.id)) +
+```{r}
+density.map.1901 <- ggmap(staticSV) +
+geom_polygon(data = lonlatSV, aes(x=longitudeWSV, y=latitudeWSV),alpha = 0.3, color = "red", fill = "red") +
+geom_point(data = e.1901.density, mapping = aes(x=lon, y=lat, size=count, color=race.id)) +
   scale_color_manual(values = c("white" = "white","colored"="gray27","octoroon"="gold","NA"= "transparent", "jewish" = "darkslateblue")) + 
-  facet_wrap("year") +
-  labs(x = "Longitude", y = "Latitude", title = "The Density of Races in the Blue Books, by location")
+  labs(x = "Longitude", y = "Latitude", title = "The Density of Races in the Blue Books, by location in 1901")
+density.map.1901
 ```
 
 ```{r}
@@ -136,4 +141,14 @@ if (!exists("ggplot.race") || !all(c("lon", "lat", "count", "race.id", "year") %
   stop("ggplot.race data frame is missing or does not have the required columns.")
 }
 
+```
+
+```{r}
+racebarchart <- ggplot(race.by.year, aes(factor(year), count, fill = race.id)) + 
+  geom_col(position = "dodge", na.rm = FALSE) + 
+  geom_text(aes(label = count), position = position_dodge(width = 0.9), vjust = -0.3, size = 2.5) +
+  labs( x = "Year", y = "Number of Workers", title = "Number of Workers by Race in the Blue Books", Fill = "race.id") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  scale_fill_manual(values = c("white" = "gold3", "colored" = "red", "octoroon" = "darkviolet", "jewish" = "gray"), name = "race.id") 
+racebarchart
 ```
