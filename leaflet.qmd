@@ -171,3 +171,25 @@ icon.pink <- makeIcon(iconUrl = "icons/pinkicon.png", iconWidth = 24, iconHeight
 icon.purple <- makeIcon(iconUrl = "icons/purple.png", iconWidth = 24, iconHeight = 24)
 icon.white <- makeIcon(iconUrl = "icons/whiteicon.png", iconWidth = 24, iconHeight = 24)
 ```
+
+```{r}
+#can this data be changed to to longer datat set and to continue to be filtered like I did with the 1900 ad 1915, I want to finsih this for my research triup 
+```
+
+```{r}
+race.id.bar <- entries %>%
+  filter(!is.na(race.id)) %>% 
+  group_by(race.id) %>% 
+  summarise(count = n())
+color.race <- c("white" = "gold3", "colored" = "red", "octoroon" = "darkviolet", "jewish" = "gray", "french" = "bisque")
+circle.graph <- ggplot(race.id.bar, aes(x = "", y = count, fill = race.id)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  scale_fill_manual(values = color.race) +
+  theme_void() +
+  labs(fill = "race.id") +
+  theme(legend.title = element_text(size = 12),
+        legend.text = element_text(size = 10)) +
+  ggtitle("Race identifications in all versions of the lue Books")
+circle.graph
+```
