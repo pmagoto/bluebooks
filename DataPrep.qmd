@@ -27,6 +27,7 @@ library(sf)
 ```{r}
 #register google key 
 register_google(key = Sys.getenv("GOOGLE_KEY"))
+register_stadiamaps(key = Sys.getenv("STADIA_KEY"))
 ```
 
 ### inserting data sets and prepping them to be geo-coded:
