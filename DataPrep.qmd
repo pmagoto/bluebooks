@@ -266,7 +266,7 @@ icon.white <- makeIcon(iconUrl = "icons/whiteicon.png", iconWidth = 24, iconHeig
 race.by.year <- entries %>% 
   group_by(year, race.id) %>%
   summarise(count= n()) %>% 
-  filter (!is.na(count)) 
+  filter (!is.na(count))  
 ```
 
 ```{r}

@@ -208,10 +208,6 @@ BSVlabeled
 ```
 
 ```{r}
-
-```
-
-```{r}
 #octoroon and train station 
 #bottom left 29.956104,-90.073112
 #top left 29.956459,-90.072821
@@ -224,10 +220,9 @@ train <- data.frame(lontrain, lattrain)
 trainlonlat <- as.data.frame(c(-90.072753, 29.956213), ncol = 2, byrow = TRUE)
 center.train <- c(lon = -90.073748, lat = 29.958887 )
 longitudetrain <- c(-90.073112, -90.072821, -90.072459, -90.072702) #longitude for the polygon
-latitudetrain <- c(29.956104,29.956459,29.956205,29.9562044) #latitude for the polygon
-lonlattrain <- as.data.frame(cbind(longitudetrain,latitudetrain))
-statictrain <- get_map(location = lonlattrain, zoom = 17, maptype = "satellite", color = "bw")
-#create dataframe for the polygon
+latitudetrain <- c(29.956104,29.956459,29.956205,29.9562044) #latitude for the polygon 
+lonlattrain <- as.data.frame(cbind(longitudetrain,latitudetrain)) #create dataframe for the polygon
+statictrain <- get_googlemap(location = lonlattrain, zoom = 17, maptype = "satellite", color = "bw")
 SVwithTrainStation <- ggmap(statictrain) + #load static map at zoom 16
   geom_polygon(data = lonlatSV, aes(x=longitudeSV, y=latitudeSV),alpha = 0.1, color = "red", fill = "red") + # add the polygon on top of static map
   annotate("text", x=-90.073891,y=29.95905,label="Storyville Vice District",color="white",size=3) + #label the district 
@@ -240,38 +235,51 @@ SVwithTrainStation
 ```
 
 ```{r}
-library(ggmap)
-library(ggplot2)
-
-# Coordinates for the train station
+centerofSV <- c(lon = -90.073891, lat = 29.95905) #creating the static map
+staticSV <- get_googlemap(center = centerofSV, zoom = 17, maptype = "satellite", color = "bw")
+SVpolygon <- matrix(c(-90.076779, 29.958558, -90.073984, 29.961689, -90.070555, 29.959363, -90.073466, 29.956301, -90.076779, 29.958558), ncol = 2, byrow = TRUE)
 lattrain <- 29.956213
 lontrain <- -90.072753
 train <- data.frame(lontrain, lattrain)
+trainlonlat <- as.data.frame(c(-90.072753, 29.956213), ncol = 2, byrow = TRUE)
+center.train <- c(lon = -90.073748, lat = 29.958887 )
+longitudetrain <- c(-90.073112, -90.072821, -90.072459, -90.072702) #longitude for the polygon
+latitudetrain <- c(29.956104,29.956459,29.956205,29.9562044) #latitude for the polygon
+lonlattrain <- as.data.frame(cbind(longitudetrain,latitudetrain))
+statictrain <- get_googlemap(location = lonlattrain, zoom = 17, maptype = "satellite", color = "bw")
+```
 
-# Coordinates for the polygon
-longitudetrain <- c(-90.073112, -90.072821, -90.072459, -90.072702)
-latitudetrain <- c(29.956104, 29.956459, 29.956205, 29.9562044)
-lonlattrain <- data.frame(longitudetrain, latitudetrain)
+```{r}
+staticSV
+SVwithLabels <- ggmap(staticSV) +
+geom_polygon(data = lonlatSV, aes(x=longitudeWSV, y=latitudeWSV),alpha = 0.3, color = "red", fill = "red")
+SVwithLabels
+```
 
-# Get the static map
-statictrain <- get_map(location = c(lon = mean(longitudetrain), lat = mean(latitudetrain)), zoom = 17, maptype = "satellite", color = "bw")
-
-statictrain <- get_stadiamap(bbox, zoom = 17, maptype = "toner-lite")
-
-# Create dataframe for the polygon
-SVwithTrainStation <- ggmap(statictrain) + 
-  geom_polygon(data = lonlattrain, aes(x = longitudetrain, y = latitudetrain), alpha = 0.1, color = "red", fill = "red") + 
-  annotate("text", x = -90.073891, y = 29.95905, label = "Storyville Vice District", color = "white", size = 3) + 
-  geom_point(data = train, aes(x = lontrain, y = lattrain), color = "blue", size = 10) + 
-  annotate("text", x = -90.072763, y = 29.956204, label = "Southern Railway Terminal", color = "white", size = 3) + 
+```{r}
+octonly <- entries %>% group_by(race.id, lat, lon) %>% summarise(count = n()) %>% filter(race.id == "octoroon")
+lattrain <- 29.956213
+lontrain <- -90.072753
+train <- data.frame(lontrain, lattrain)
+SVwithTrainStation <- ggmap(staticSV) + 
+  geom_polygon(data = lonlatSV, aes(x=longitudeWSV, y=latitudeWSV),alpha = 0.3, color = "red", fill = "red") + # add the polygon on top of static map
+  annotate("text", x=-90.073891,y=29.95905,label="Storyville Vice District",color="white",size=3) + #label the district 
+  geom_point(data = octonly, mapping = aes(x=lon, y=lat, size=count, color=race.id)) +
+  scale_color_manual(values = c("white" = "white","colored"="gray27","octoroon"="gold","NA"= "transparent", "jewish" = "darkslateblue")) + 
+  geom_point(data = train, aes(x=lontrain, y=lattrain), color="blue",size=10) + 
+  annotate("text", x=-90.072763,y=29.956204,label="Southern Railway Terminal",color="gold",size=5) + 
   labs(x = "Longitude", y = "Latitude", title = "Train Station Location Compared to Storyville")
-
 SVwithTrainStation
 ```
 
 ```{r}
-#chapter two map for octroon and railway station
-centerofSV <- c(lon = -90.073891, lat = 29.95905) #creating the static map
-SVbox <- make_bbox(lon = centerofSV["lon"], lat = centerofSV["lat"], f = 0.1)
-staticSV <- get_stadiamap(maptype = "stamen_toner", bbox = SVbox, zoom = 17)
+race.year.1907legislation <- race.by.year %>% filter(year == 1906 | year == 1907 | year == 1908 | year == 1912) %>%filter (!is.na(count)) %>% filter(race.id != "")
+racebarchart1907 <- ggplot(race.year.1907legislation, aes(factor(race.id), count, fill = race.id)) + 
+  geom_col(position = "dodge", na.rm = FALSE) + 
+  geom_text(aes(label = count), position = position_dodge(width = 0.9), vjust = -0.3, size = 2.5) +
+  labs( x = "", y = "Number of Workers", title = "Number of Workers by Race in the Blue Books", Fill = "race.id") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  scale_fill_manual(values = c("white" = "gold3", "colored" = "red", "octoroon" = "darkviolet", "jewish" = "gray"), name = "race.id") + 
+  facet_wrap(~ year)
+racebarchart1907
 ```
