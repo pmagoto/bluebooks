@@ -48,7 +48,7 @@ ggplot.race <- entries %>%
 ```{r}
 #thihs is useless, needs ot each be a separate map. 
 centerofSV <- c(lon = -90.073891, lat = 29.95905) #creating the static map
-staticSV <- get_map(location = centerofSV, zoom = 17, maptype = "satellite", color = "bw")
+staticSV <- get_googlemap(center = centerofSV, zoom = 17, maptype = "satellite", color = "bw")
 SVpolygon <- matrix(c(-90.076779, 29.958558, -90.073984, 29.961689, -90.070555, 29.959363, -90.073466, 29.956301, -90.076779, 29.958558), ncol = 2, byrow = TRUE)
 density.map <- ggmap(staticSV) +
 #+ geom_polygon(data = SVpolygon, aes(x=longitudeSV, y=latitudeSV),alpha = 0.3, color = "red", fill = "red") 
