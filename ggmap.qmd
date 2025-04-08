@@ -1,0 +1,92 @@
+---
+title: "ggmap"
+format: html
+editor: visual
+---
+
+## 
+
+```{r}
+#LAST SEMESTER
+geo.race.1900 <- people.1900 %>% #filter in the people.1900 csv file
+  group_by(lat,lon,race.id) %>% #group by latitude and longitude to find density of race at each location
+    summarise(count.1900 = n()) #count to find find density at a location, by race
+geo.race.1915 <- people.1915 %>% #filter in the people.1915 file
+  group_by(lat,lon,race.id) %>% #group by latitude and longitude to find density of race at each location
+    summarise(count.1915 =n()) #count to find density at a location, by race
+geo.race <- full_join(geo.race.1900, geo.race.1915) #join both together to plot together
+geo.race.long <- pivot_longer(geo.race, cols = starts_with("count"), names_to = "year", values_to = "count") %>% #ensure that the data is readable for a feceted plot
+  arrange(desc(count)) #ensure that the data points with less density appear on top of data points with higher density to read the plot clearly
+density.map <- ggmap(staticSV) + geom_polygon(data = lonlatSV, aes(x=longitudeSV, y=latitudeSV),alpha = 0.3, color = "red", fill = "red") + 
+  geom_point(data = geo.race.long, mapping = aes(x=lon, y=lat, size=count, color=race.id)) +
+  scale_color_manual(values = c("white" = "white","colored"="gray27","octoroon"="gold","NA"= "transparent", "jewish" = "darkslateblue")) + 
+  facet_wrap("year") +
+  labs(x = "Longitude", y = "Latitude", title = "The Density of Races in the Blue Books, by location, in 1900 and in 1915")
+#density.map
+#^THIS NEEDS TO BE REWORKED USING THE CORRECT INFOR FROM THE NEW DATASET 
+```
+
+```{r}
+#thihs is useless, needs ot each be a separate map. 
+centerofSV <- c(lon = -90.073891, lat = 29.95905) #creating the static map
+staticSV <- get_googlemap(center = centerofSV, zoom = 17, maptype = "satellite", color = "bw")
+SVpolygon <- matrix(c(-90.076779, 29.958558, -90.073984, 29.961689, -90.070555, 29.959363, -90.073466, 29.956301, -90.076779, 29.958558), ncol = 2, byrow = TRUE)
+density.map <- ggmap(staticSV) +
+#+ geom_polygon(data = SVpolygon, aes(x=longitudeSV, y=latitudeSV),alpha = 0.3, color = "red", fill = "red") 
+geom_point(data = ggplot.race, mapping = aes(x=lon, y=lat, size=count, color=race.id)) +
+  scale_color_manual(values = c("white" = "white","colored"="gray27","octoroon"="gold","NA"= "transparent", "jewish" = "darkslateblue")) + 
+  facet_wrap("year") +
+  labs(x = "Longitude", y = "Latitude", title = "The Density of Races in the Blue Books, by location")
+density.map
+```
+
+```{r}
+density.map.1900 <- ggmap(staticSV) +
+geom_polygon(data = lonlatSV, aes(x=longitudeWSV, y=latitudeWSV),alpha = 0.3, color = "red", fill = "red") +
+geom_point(data = e.1900.density, mapping = aes(x=lon, y=lat, size=count, color=race.id)) +
+  scale_color_manual(values = c("white" = "white","colored"="gray27","octoroon"="gold","NA"= "transparent", "jewish" = "darkslateblue")) + 
+  labs(x = "Longitude", y = "Latitude", title = "The Density of Races in the Blue Books, by location in 1900")
+density.map.1900
+```
+
+```{r}
+register_google(key = Sys.getenv("GOOGLE_KEY"))
+e.0315 <- entries %>% 
+  filter(year == 1903 | year == 1915) %>% 
+  group_by(lat, lon, race.id,year) %>% 
+  filter(!is.na(race.id) & race.id != "") %>% 
+  summarise(count = n()) %>% 
+   arrange(desc(count))
+density.map.1903.1915 <- ggmap(staticSV) +
+geom_polygon(data = lonlatWSV, aes(x=longitudeWSV, y=latitudeWSV),alpha = 0.3, color = "red", fill = "red") +
+geom_point(data = e.0315, mapping = aes(x=lon, y=lat, size=count, color=race.id)) +
+  scale_color_manual(values = c("white" = "white","colored"="gray27","octoroon"="gold","NA"= "transparent", "jewish" = "darkslateblue")) + 
+  labs(x = "Longitude", y = "Latitude", title = "The Density of Races in the Blue Books, by location in 1903and 1915") +
+  facet_wrap(~ year)
+density.map.1903.1915
+```
+
+```{r}
+#octoroon and train station 
+#bottom left 29.956104,-90.073112
+#top left 29.956459,-90.072821
+#top right 29.956205,-90.072459
+#bottom right 29.955948,-90.072702
+#center coords 29.958887,-90.073748
+lattrain <- 29.956213
+lontrain <- -90.072753
+train <- data.frame(lontrain, lattrain)
+trainlonlat <- as.data.frame(c(-90.072753, 29.956213), ncol = 2, byrow = TRUE)
+center.train <- c(lon = -90.073748, lat = 29.958887 )
+longitudetrain <- c(-90.073112, -90.072821, -90.072459, -90.072702) #longitude for the polygon
+latitudetrain <- c(29.956104,29.956459,29.956205,29.9562044) #latitude for the polygon 
+lonlattrain <- as.data.frame(cbind(longitudetrain,latitudetrain)) #create dataframe for the polygon
+statictrain <- get_googlemap(location = lonlattrain, zoom = 17, maptype = "satellite", color = "bw")
+SVwithTrainStation <- ggmap(statictrain) + #load static map at zoom 16
+  geom_polygon(data = lonlatWSV, aes(x=longitudeWSV, y=latitudeWSV),alpha = 0.1, color = "red", fill = "red") + # add the polygon on top of static map
+  annotate("text", x=-90.073891,y=29.95905,label="Storyville Vice District",color="white",size=3) + #label the district 
+  geom_point(data = train, color="blue",size=10) + 
+  annotate("text", x=-90.072763,y=29.956204,label="Southern Railway Terminal",color="white",size=3) + 
+  labs(x = "Longitude", y = "Latitude", title = "Train Station Location Compared to Storyville")
+SVwithTrainStation
+```
