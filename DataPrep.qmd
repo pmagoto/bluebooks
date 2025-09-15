@@ -154,7 +154,7 @@ e.1903.density <- entries %>%
   filter(year == 1903) %>% 
   group_by(lat, lon, race.id,year) %>% 
   filter(!is.na(race.id) & race.id != "") %>% 
-  summarise(count = n()) %>% 
+  summarise(count = n()) %>% x
   arrange(desc(count))
 e.1905.density <- entries %>% 
   filter(year == 1905) %>% 
